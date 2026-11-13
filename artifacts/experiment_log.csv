@@ -1,0 +1,4 @@
+strategy,chunking,chunk_size,overlap,metadata,filter,vectorizer,hypothesis,dev_hit1,dev_hit3,test_hit1,test_hit3,notes
+A,fixed_size,500,50,document_id;source;page;chapter;chunk_type,none,OpenAI text-embedding-3-small (1536d),Fixed-size overlap may preserve context,0.4000,0.8667,0.4000,0.8000,224 chunks; 98531 chars; ingest 2.04s; hypotheses retrospective; API tokens/cost not logged
+B,by_paragraph,700,0,document_id;source;page;chapter;chunk_type,none,OpenAI text-embedding-3-small (1536d),Paragraph chunks may preserve coherent ideas,0.4667,0.6667,0.2000,0.8000,161 chunks; 90229 chars; ingest 1.74s; hypotheses retrospective; API tokens/cost not logged
+C,by_paragraph,700,0,document_id;source;page;chapter;chunk_type,chapter when supplied,OpenAI text-embedding-3-small (1536d),Chapter filter may improve search relevance,0.4667,0.6667,0.2000,0.8000,161 chunks; 90229 chars; ingest 2.15s; hypotheses retrospective; API tokens/cost not logged

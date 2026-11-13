@@ -1,0 +1,17 @@
+{
+  "A": {
+    "chunks": 224,
+    "characters": 98531,
+    "ingest_seconds": 2.04
+  },
+  "B": {
+    "chunks": 161,
+    "characters": 90229,
+    "ingest_seconds": 1.74
+  },
+  "C": {
+    "chunks": 161,
+    "characters": 90229,
+    "ingest_seconds": 2.15
+  }
+}

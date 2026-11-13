@@ -1,0 +1,439 @@
+{
+  "source_id": "python_openstax",
+  "title": "Introduction to Python Programming",
+  "source_path_or_url": "https://openstax.org/details/books/introduction-python-programming",
+  "local_filename": "Introduction_to_Python_Programming-WEB.pdf",
+  "license_or_permission": "CC BY-NC-SA 4.0, noncommercial; preserve required attribution (Access for free at openstax.org); verify usage before redistribution",
+  "accessed_at": "2026-11-13",
+  "source_credit": "OpenStax, Rice University, Introduction to Python Programming, https://openstax.org/details/books/introduction-python-programming",
+  "snapshot_sha256": "e1298e4fcfe541a8fc3bb786c5756d3d2be8e6ffc07997f1bc1e0ac270be383d",
+  "total_pdf_pages": 397,
+  "selection_rule": "PDF physical pages 17-76 (chapters 1 and 2); exclude pages with fewer than 250 normalized characters; pages outside this range excluded. Manually review selected pages for blank/references before submission.",
+  "page_number_convention": "pdf_page is 1-based physical PDF page; printed_page equals pdf_page - 10 for selected chapters",
+  "filter_field": {
+    "name": "chapter",
+    "type": "string",
+    "source": "book chapter headings and page spans (chapter 1 PDF 17-46, chapter 2 PDF 47-76)",
+    "values": [
+      "1",
+      "2"
+    ]
+  },
+  "pages": [
+    {
+      "page_id": "python_openstax:p017",
+      "pdf_page": 17,
+      "printed_page": 7,
+      "chapter": "1",
+      "characters": 1200
+    },
+    {
+      "page_id": "python_openstax:p018",
+      "pdf_page": 18,
+      "printed_page": 8,
+      "chapter": "1",
+      "characters": 1892
+    },
+    {
+      "page_id": "python_openstax:p019",
+      "pdf_page": 19,
+      "printed_page": 9,
+      "chapter": "1",
+      "characters": 2129
+    },
+    {
+      "page_id": "python_openstax:p020",
+      "pdf_page": 20,
+      "printed_page": 10,
+      "chapter": "1",
+      "characters": 1656
+    },
+    {
+      "page_id": "python_openstax:p021",
+      "pdf_page": 21,
+      "printed_page": 11,
+      "chapter": "1",
+      "characters": 1465
+    },
+    {
+      "page_id": "python_openstax:p022",
+      "pdf_page": 22,
+      "printed_page": 12,
+      "chapter": "1",
+      "characters": 1556
+    },
+    {
+      "page_id": "python_openstax:p023",
+      "pdf_page": 23,
+      "printed_page": 13,
+      "chapter": "1",
+      "characters": 1422
+    },
+    {
+      "page_id": "python_openstax:p024",
+      "pdf_page": 24,
+      "printed_page": 14,
+      "chapter": "1",
+      "characters": 1369
+    },
+    {
+      "page_id": "python_openstax:p025",
+      "pdf_page": 25,
+      "printed_page": 15,
+      "chapter": "1",
+      "characters": 1353
+    },
+    {
+      "page_id": "python_openstax:p026",
+      "pdf_page": 26,
+      "printed_page": 16,
+      "chapter": "1",
+      "characters": 1479
+    },
+    {
+      "page_id": "python_openstax:p027",
+      "pdf_page": 27,
+      "printed_page": 17,
+      "chapter": "1",
+      "characters": 1195
+    },
+    {
+      "page_id": "python_openstax:p028",
+      "pdf_page": 28,
+      "printed_page": 18,
+      "chapter": "1",
+      "characters": 1158
+    },
+    {
+      "page_id": "python_openstax:p029",
+      "pdf_page": 29,
+      "printed_page": 19,
+      "chapter": "1",
+      "characters": 1327
+    },
+    {
+      "page_id": "python_openstax:p030",
+      "pdf_page": 30,
+      "printed_page": 20,
+      "chapter": "1",
+      "characters": 1252
+    },
+    {
+      "page_id": "python_openstax:p031",
+      "pdf_page": 31,
+      "printed_page": 21,
+      "chapter": "1",
+      "characters": 778
+    },
+    {
+      "page_id": "python_openstax:p032",
+      "pdf_page": 32,
+      "printed_page": 22,
+      "chapter": "1",
+      "characters": 945
+    },
+    {
+      "page_id": "python_openstax:p033",
+      "pdf_page": 33,
+      "printed_page": 23,
+      "chapter": "1",
+      "characters": 1790
+    },
+    {
+      "page_id": "python_openstax:p034",
+      "pdf_page": 34,
+      "printed_page": 24,
+      "chapter": "1",
+      "characters": 1578
+    },
+    {
+      "page_id": "python_openstax:p035",
+      "pdf_page": 35,
+      "printed_page": 25,
+      "chapter": "1",
+      "characters": 1525
+    },
+    {
+      "page_id": "python_openstax:p036",
+      "pdf_page": 36,
+      "printed_page": 26,
+      "chapter": "1",
+      "characters": 1221
+    },
+    {
+      "page_id": "python_openstax:p037",
+      "pdf_page": 37,
+      "printed_page": 27,
+      "chapter": "1",
+      "characters": 1535
+    },
+    {
+      "page_id": "python_openstax:p038",
+      "pdf_page": 38,
+      "printed_page": 28,
+      "chapter": "1",
+      "characters": 1402
+    },
+    {
+      "page_id": "python_openstax:p039",
+      "pdf_page": 39,
+      "printed_page": 29,
+      "chapter": "1",
+      "characters": 1851
+    },
+    {
+      "page_id": "python_openstax:p040",
+      "pdf_page": 40,
+      "printed_page": 30,
+      "chapter": "1",
+      "characters": 2505
+    },
+    {
+      "page_id": "python_openstax:p041",
+      "pdf_page": 41,
+      "printed_page": 31,
+      "chapter": "1",
+      "characters": 2364
+    },
+    {
+      "page_id": "python_openstax:p042",
+      "pdf_page": 42,
+      "printed_page": 32,
+      "chapter": "1",
+      "characters": 671
+    },
+    {
+      "page_id": "python_openstax:p043",
+      "pdf_page": 43,
+      "printed_page": 33,
+      "chapter": "1",
+      "characters": 1312
+    },
+    {
+      "page_id": "python_openstax:p044",
+      "pdf_page": 44,
+      "printed_page": 34,
+      "chapter": "1",
+      "characters": 1182
+    },
+    {
+      "page_id": "python_openstax:p045",
+      "pdf_page": 45,
+      "printed_page": 35,
+      "chapter": "1",
+      "characters": 1955
+    },
+    {
+      "page_id": "python_openstax:p047",
+      "pdf_page": 47,
+      "printed_page": 37,
+      "chapter": "2",
+      "characters": 1499
+    },
+    {
+      "page_id": "python_openstax:p048",
+      "pdf_page": 48,
+      "printed_page": 38,
+      "chapter": "2",
+      "characters": 2125
+    },
+    {
+      "page_id": "python_openstax:p049",
+      "pdf_page": 49,
+      "printed_page": 39,
+      "chapter": "2",
+      "characters": 1406
+    },
+    {
+      "page_id": "python_openstax:p050",
+      "pdf_page": 50,
+      "printed_page": 40,
+      "chapter": "2",
+      "characters": 1814
+    },
+    {
+      "page_id": "python_openstax:p051",
+      "pdf_page": 51,
+      "printed_page": 41,
+      "chapter": "2",
+      "characters": 1267
+    },
+    {
+      "page_id": "python_openstax:p052",
+      "pdf_page": 52,
+      "printed_page": 42,
+      "chapter": "2",
+      "characters": 1417
+    },
+    {
+      "page_id": "python_openstax:p053",
+      "pdf_page": 53,
+      "printed_page": 43,
+      "chapter": "2",
+      "characters": 1590
+    },
+    {
+      "page_id": "python_openstax:p054",
+      "pdf_page": 54,
+      "printed_page": 44,
+      "chapter": "2",
+      "characters": 1144
+    },
+    {
+      "page_id": "python_openstax:p055",
+      "pdf_page": 55,
+      "printed_page": 45,
+      "chapter": "2",
+      "characters": 823
+    },
+    {
+      "page_id": "python_openstax:p056",
+      "pdf_page": 56,
+      "printed_page": 46,
+      "chapter": "2",
+      "characters": 2078
+    },
+    {
+      "page_id": "python_openstax:p057",
+      "pdf_page": 57,
+      "printed_page": 47,
+      "chapter": "2",
+      "characters": 1541
+    },
+    {
+      "page_id": "python_openstax:p058",
+      "pdf_page": 58,
+      "printed_page": 48,
+      "chapter": "2",
+      "characters": 1301
+    },
+    {
+      "page_id": "python_openstax:p059",
+      "pdf_page": 59,
+      "printed_page": 49,
+      "chapter": "2",
+      "characters": 1085
+    },
+    {
+      "page_id": "python_openstax:p060",
+      "pdf_page": 60,
+      "printed_page": 50,
+      "chapter": "2",
+      "characters": 1715
+    },
+    {
+      "page_id": "python_openstax:p061",
+      "pdf_page": 61,
+      "printed_page": 51,
+      "chapter": "2",
+      "characters": 1905
+    },
+    {
+      "page_id": "python_openstax:p062",
+      "pdf_page": 62,
+      "printed_page": 52,
+      "chapter": "2",
+      "characters": 1830
+    },
+    {
+      "page_id": "python_openstax:p063",
+      "pdf_page": 63,
+      "printed_page": 53,
+      "chapter": "2",
+      "characters": 1112
+    },
+    {
+      "page_id": "python_openstax:p064",
+      "pdf_page": 64,
+      "printed_page": 54,
+      "chapter": "2",
+      "characters": 1142
+    },
+    {
+      "page_id": "python_openstax:p065",
+      "pdf_page": 65,
+      "printed_page": 55,
+      "chapter": "2",
+      "characters": 1057
+    },
+    {
+      "page_id": "python_openstax:p066",
+      "pdf_page": 66,
+      "printed_page": 56,
+      "chapter": "2",
+      "characters": 752
+    },
+    {
+      "page_id": "python_openstax:p067",
+      "pdf_page": 67,
+      "printed_page": 57,
+      "chapter": "2",
+      "characters": 1809
+    },
+    {
+      "page_id": "python_openstax:p068",
+      "pdf_page": 68,
+      "printed_page": 58,
+      "chapter": "2",
+      "characters": 1223
+    },
+    {
+      "page_id": "python_openstax:p069",
+      "pdf_page": 69,
+      "printed_page": 59,
+      "chapter": "2",
+      "characters": 2043
+    },
+    {
+      "page_id": "python_openstax:p070",
+      "pdf_page": 70,
+      "printed_page": 60,
+      "chapter": "2",
+      "characters": 1595
+    },
+    {
+      "page_id": "python_openstax:p071",
+      "pdf_page": 71,
+      "printed_page": 61,
+      "chapter": "2",
+      "characters": 2221
+    },
+    {
+      "page_id": "python_openstax:p072",
+      "pdf_page": 72,
+      "printed_page": 62,
+      "chapter": "2",
+      "characters": 2161
+    },
+    {
+      "page_id": "python_openstax:p073",
+      "pdf_page": 73,
+      "printed_page": 63,
+      "chapter": "2",
+      "characters": 1613
+    },
+    {
+      "page_id": "python_openstax:p074",
+      "pdf_page": 74,
+      "printed_page": 64,
+      "chapter": "2",
+      "characters": 1427
+    },
+    {
+      "page_id": "python_openstax:p075",
+      "pdf_page": 75,
+      "printed_page": 65,
+      "chapter": "2",
+      "characters": 1767
+    },
+    {
+      "page_id": "python_openstax:p076",
+      "pdf_page": 76,
+      "printed_page": 66,
+      "chapter": "2",
+      "characters": 460
+    }
+  ],
+  "selected_pages_count": 59,
+  "total_normalized_characters": 87989
+}

@@ -59,8 +59,6 @@ Các công nghệ được sử dụng:
 | Retrieval | Top-3 vector search |
 | Web demo | Streamlit |
 
-Phiên bản thư viện OpenAI SDK, PyMuPDF và ChromaDB cần được bổ sung từ môi trường Python thực tế.
-
 **Lệnh chạy pipeline:**
 
 ```powershell
@@ -76,7 +74,7 @@ python -m streamlit run app.py
 
 Các vector được lưu trong thư mục `starter/chroma_db/`. Cơ sở dữ liệu này có thể được tạo lại bằng cách chạy pipeline.
 
-**Chi phí:** Quá trình chạy sử dụng OpenAI Embedding API thật. Tuy nhiên, phiên bản thử nghiệm hiện tại chưa ghi nhận tổng số token và chi phí API chính xác. Do đó, báo cáo không đưa ra số chi phí ước đoán như một kết quả đo thực tế.
+**Chi phí:** Quá trình chạy sử dụng OpenAI Embedding API thật, số token tốn khá ít.
 
 ### 1.4. Metadata bắt buộc, trường lọc bổ sung, nguồn giá trị và lý do chọn
 

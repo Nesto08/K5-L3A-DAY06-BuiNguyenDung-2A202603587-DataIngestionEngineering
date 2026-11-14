@@ -209,14 +209,14 @@ Bộ câu hỏi ghi rõ quy tắc chia dev/test. Tuy nhiên, chưa có minh ch�
 
 Kết quả chạy ba chiến lược:
 
-| Strategy | Split | Hit@1 (n/N) | Evidence Hit@3 (n/N) | Chunk count | Thời gian ingest | Chi phí |
+| Strategy | Split | Hit@1 (n/N) | Evidence Hit@3 (n/N) | Chunk count | Thời gian ingest |
 |---|---|---|---|---|---|---|
-| A | Dev | 6/15 (40%) | 13/15 (86,67%) | 224 | 2,04s | Chưa ghi |
-| A | Test | 2/5 (40%) | 4/5 (80%) | 224 | 2,04s | Chưa ghi |
-| B | Dev | 7/15 (46,67%) | 10/15 (66,67%) | 161 | 1,74s | Chưa ghi |
-| B | Test | 1/5 (20%) | 4/5 (80%) | 161 | 1,74s | Chưa ghi |
-| C | Dev | 7/15 (46,67%) | 10/15 (66,67%) | 161 | 2,15s | Chưa ghi |
-| C | Test | 1/5 (20%) | 4/5 (80%) | 161 | 2,15s | Chưa ghi |
+| A | Dev | 6/15 (40%) | 13/15 (86,67%) | 224 | 2,04s |
+| A | Test | 2/5 (40%) | 4/5 (80%) | 224 | 2,04s |
+| B | Dev | 7/15 (46,67%) | 10/15 (66,67%) | 161 | 1,74s |
+| B | Test | 1/5 (20%) | 4/5 (80%) | 161 | 1,74s |
+| C | Dev | 7/15 (46,67%) | 10/15 (66,67%) | 161 | 2,15s |
+| C | Test | 1/5 (20%) | 4/5 (80%) | 161 | 2,15s |
 
 **Nhận xét:**
 

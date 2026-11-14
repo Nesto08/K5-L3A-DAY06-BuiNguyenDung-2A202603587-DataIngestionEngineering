@@ -3,7 +3,7 @@
 **Họ và tên:** Bùi Nguyên Dũng  
 **MSSV:** 2A202603587  
 **Lớp:** L3A  
-**Chủ đề:** Data Ingestion Engineering — Xây dựng pipeline truy xuất tài liệu học Python  
+**Bài thực hành:** Data Ingestion Engineering  
 **Repository:** https://github.com/Nesto08/K5-L3A-DAY06-2A202603587-BuiNguyenDung-DataIngestionEngineering
 
 ---
@@ -12,39 +12,50 @@
 
 ### 1.1. Chủ đề, nguồn/quyền, số trang và quy tắc tính trang
 
-Bài thực hành tập trung vào việc xây dựng pipeline xử lý dữ liệu tài liệu PDF, chia nhỏ nội dung thành các chunk, chuyển đổi văn bản thành vector embedding và lưu trữ trong vector database để phục vụ truy xuất ngữ nghĩa.
+Trong bài thực hành Day 6, tôi lựa chọn xây dựng hệ thống xử lý và truy xuất nội dung từ tài liệu học lập trình Python.
 
-Corpus được lựa chọn là tài liệu **Introduction to Python Programming** của OpenStax.
+**Corpus được sử dụng:**
 
+- **Tên tài liệu:** *Introduction to Python Programming*.
+- **Nhà xuất bản:** OpenStax.
 - **Nguồn:** https://openstax.org/details/books/introduction-python-programming
-- **Loại dữ liệu:** PDF.
-- **Nội dung sử dụng:** Hai chương đầu, *Statements* và *Expressions*.
+- **Định dạng:** PDF.
+- **Nội dung:** Chương 1 — Statements và Chương 2 — Expressions.
 - **Phạm vi:** 59 trang nội dung được lựa chọn trong khoảng trang vật lý PDF 17–76.
-- **Nguồn và giấy phép:** Tài liệu giáo dục mở của OpenStax; thông tin nguồn và quyền sử dụng được khai báo trong `data/manifest.json`.
+- **Quyền sử dụng:** Tài liệu giáo dục mở của OpenStax; thông tin nguồn và giấy phép được khai báo trong `data/manifest.json`.
 
-Quy tắc tính trang dựa trên số trang vật lý của PDF, không sử dụng số trang in trong sách làm định danh chính. Các trang bìa, trang trắng hoặc trang không chứa nội dung hữu ích không được tính vào corpus.
+Tôi sử dụng số trang vật lý của PDF để định danh dữ liệu, không dùng số trang in trong sách làm định danh chính.
 
-Thông tin về trang, chương và nguồn được lưu trong `manifest.json` để bảo đảm khả năng truy vết.
+Các trang bìa, trang trống hoặc trang không có nội dung hữu ích không được đưa vào tập dữ liệu dùng cho thí nghiệm. Manifest ghi lại thông tin nguồn, trang, chương và nội dung tương ứng để thuận tiện kiểm tra.
+
+Tài liệu được chọn vì có cấu trúc theo chương rõ ràng, nội dung phù hợp để xây dựng câu hỏi benchmark và có thể kiểm tra trực tiếp evidence trong PDF.
 
 ### 1.2. Chuẩn hóa, lỗi và giới hạn
 
-Pipeline sử dụng thư viện PyMuPDF để đọc và trích xuất nội dung văn bản từ PDF.
+Pipeline sử dụng **PyMuPDF** để đọc và trích xuất văn bản từ PDF.
 
-Sau khi trích xuất, văn bản được xử lý qua các bước:
+Quy trình xử lý gồm:
 
-1. Chuẩn hóa Unicode theo NFC.
-2. Chuẩn hóa ký tự xuống dòng và khoảng trắng.
-3. Loại bỏ các dòng trống dư thừa.
-4. Bỏ qua những trang không trích xuất được văn bản.
-5. Gắn metadata cho từng trang trước khi chia chunk.
+1. Đọc các trang PDF và trích xuất nội dung văn bản.
+2. Chuẩn hóa Unicode về NFC.
+3. Chuẩn hóa khoảng trắng và ký tự xuống dòng.
+4. Loại bỏ các trang không trích xuất được văn bản.
+5. Gắn metadata trước khi thực hiện chunking.
 
-Trong quá trình chạy, chương trình ghi nhận cảnh báo trang PDF 1 và 2 không có văn bản trích xuất được. Chương trình tiếp tục xử lý mà không bị dừng.
+Trong quá trình chạy, hệ thống ghi nhận cảnh báo hai trang đầu không có nội dung văn bản trích xuất được. Chương trình bỏ qua các trang này và tiếp tục xử lý.
 
-**Giới hạn:** PDF có thể chứa ngắt dòng không tự nhiên, tiêu đề đầu trang, chân trang, bảng biểu hoặc đoạn văn bị phân tách. Những yếu tố này có thể làm giảm chất lượng chunking và khiến evidence bị chia sang nhiều chunk.
+Một số giới hạn của phương pháp:
+
+- PDF có thể chứa ngắt dòng không tự nhiên.
+- Header, footer, bảng biểu và ví dụ mã nguồn có thể ảnh hưởng đến ranh giới đoạn.
+- Chunking có thể cắt ngang câu hoặc làm mất một phần ngữ cảnh.
+- Chưa áp dụng OCR cho các trang chỉ chứa hình ảnh.
+
+Những yếu tố này có thể tác động trực tiếp đến chất lượng truy xuất.
 
 ### 1.3. Embedding model, vector store, metric, lệnh chạy và chi phí
 
-Các công nghệ được sử dụng:
+Tôi sử dụng OpenAI Embedding API để chuyển các chunk thành vector và ChromaDB để lưu trữ, tìm kiếm.
 
 | Thành phần | Cấu hình |
 |---|---|
@@ -53,11 +64,12 @@ Các công nghệ được sử dụng:
 | Embedding provider | OpenAI |
 | Embedding model | `text-embedding-3-small` |
 | Vector dimensions | 1536 |
-| Vector database | ChromaDB |
-| Storage | PersistentClient, lưu cục bộ |
+| Vector store | ChromaDB PersistentClient |
 | Similarity metric | Cosine similarity |
-| Retrieval | Top-3 vector search |
+| Retrieval | Top-3 |
 | Web demo | Streamlit |
+
+Các vector được lưu trong thư mục `starter/chroma_db/`, cho phép tái sử dụng sau khi kết thúc chương trình.
 
 **Lệnh chạy pipeline:**
 
@@ -66,33 +78,35 @@ cd starter
 python -m src.run
 ```
 
-**Lệnh chạy ứng dụng web:**
+**Lệnh chạy web app:**
 
 ```powershell
 python -m streamlit run app.py
 ```
 
-Các vector được lưu trong thư mục `starter/chroma_db/`. Cơ sở dữ liệu này có thể được tạo lại bằng cách chạy pipeline.
+Web app cho phép nhập câu hỏi, chọn chiến lược A/B/C, xem kết quả truy xuất và theo dõi nhật ký chạy.
 
-**Chi phí:** Quá trình chạy sử dụng OpenAI Embedding API thật, số token tốn khá ít.
+**Phiên bản thư viện:** Chưa ghi lại đầy đủ phiên bản OpenAI SDK, ChromaDB và PyMuPDF tại thời điểm thực nghiệm. Có thể kiểm tra trong môi trường chạy bằng `python -m pip show openai chromadb pymupdf`.
+
+**Chi phí:** Pipeline sử dụng embedding model thật thông qua API. Tuy nhiên, chương trình chưa ghi nhận tổng số token và chi phí API chính xác nên không đưa ra một giá trị chi phí giả định.
 
 ### 1.4. Metadata bắt buộc, trường lọc bổ sung, nguồn giá trị và lý do chọn
 
-Các chunk được gắn các trường metadata:
+Mỗi chunk lưu các metadata sau:
 
-| Trường | Ý nghĩa | Nguồn giá trị |
+| Metadata | Ý nghĩa | Nguồn |
 |---|---|---|
-| `document_id` | Mã định danh tài liệu | Manifest |
-| `source` | Đường dẫn nguồn PDF | Manifest |
-| `page` | Trang vật lý PDF | PDF parser |
-| `chapter` | Chương tương ứng | Manifest |
-| `chunk_type` | Phương pháp chia chunk | Chunking pipeline |
+| `document_id` | Mã tài liệu | Manifest |
+| `source` | Nguồn tài liệu | Manifest |
+| `page` | Trang PDF | PDF parser |
+| `chapter` | Chương của tài liệu | Manifest |
+| `chunk_type` | Phương pháp chunking | Pipeline |
 
-Trường `chapter` được lựa chọn làm metadata filter vì corpus gồm hai chương có nội dung phân biệt được.
+Tôi chọn `chapter` làm trường lọc bổ sung do corpus gồm hai chương có nội dung phân biệt rõ.
 
-Khi câu hỏi yêu cầu tìm trong một chương cụ thể, cấu hình C có thể giới hạn phạm vi tìm kiếm theo giá trị `chapter`.
+Khi câu hỏi yêu cầu nội dung thuộc chương cụ thể, metadata filter giúp giới hạn phạm vi tìm kiếm.
 
-Giá trị chương không được mô hình AI tự suy đoán mà được lấy từ dữ liệu khai báo trong manifest.
+Giá trị `chapter` được lấy từ manifest, không phải do mô hình tự suy đoán. Điều này giúp việc lọc và truy vết có cơ sở rõ ràng.
 
 ---
 
@@ -100,82 +114,100 @@ Giá trị chương không được mô hình AI tự suy đoán mà được l�
 
 ### 2.1. Ba chiến lược A/B/C
 
-Ba chiến lược sử dụng chung corpus, embedding model, vector database, cosine similarity và bộ câu hỏi benchmark.
+Tôi triển khai ba chiến lược trên cùng corpus, embedding model, vector database và bộ câu hỏi.
+
+| Tham số | Strategy A | Strategy B | Strategy C |
+|---|---|---|---|
+| Chunking | Fixed-size | Paragraph | Paragraph |
+| Chunk size | 500 ký tự | Tối đa 700 ký tự | Tối đa 700 ký tự |
+| Overlap | 50 | 0 | 0 |
+| Metadata | Có | Có | Có |
+| Metadata filter | Không | Không | Có khi được yêu cầu |
+| Embedding model | `text-embedding-3-small` | Giống A | Giống A |
+| Vector store | ChromaDB | ChromaDB | ChromaDB |
+| Số chunk | 224 | 161 | 161 |
 
 **Strategy A — Fixed-size Chunking**
 
-- Chia theo 500 ký tự mỗi chunk.
-- Overlap 50 ký tự.
-- Không sử dụng metadata filter trong truy xuất.
-- Số chunk tạo ra: 224.
+Chia nội dung thành các đoạn 500 ký tự, với overlap 50 ký tự giữa những chunk liên tiếp.
 
-Đây là cấu hình baseline để so sánh.
+Ưu điểm là đơn giản, dễ kiểm soát kích thước và overlap có thể giúp giữ lại một phần ngữ cảnh.
+
+Hạn chế là chunk có thể kết thúc giữa câu hoặc giữa một đoạn giải thích.
 
 **Strategy B — Paragraph Chunking**
 
-- Chia theo ranh giới đoạn văn.
-- Kích thước tối đa 700 ký tự.
-- Không sử dụng overlap.
-- Không sử dụng metadata filter.
-- Số chunk tạo ra: 161.
+Chia tài liệu theo đoạn văn, giới hạn tối đa 700 ký tự mỗi chunk.
 
-Mục đích là đánh giá sự thay đổi chất lượng retrieval và coherence khi chuyển từ fixed-size sang paragraph chunking.
+Mục tiêu là giữ nội dung trong các đoạn có liên quan với nhau, hạn chế việc cắt ngang ý so với fixed-size chunking.
+
+Tuy nhiên, hiệu quả phụ thuộc vào việc PDF có giữ được ranh giới đoạn văn chính xác hay không.
 
 **Strategy C — Paragraph Chunking + Metadata Filter**
 
-- Giữ nguyên toàn bộ cách chia chunk của B.
-- Kích thước tối đa 700 ký tự.
-- Không sử dụng overlap.
-- Bổ sung metadata filter theo `chapter` khi câu hỏi có yêu cầu.
-- Số chunk tạo ra: 161.
+Sử dụng cùng phương pháp chunking với Strategy B nhưng bổ sung metadata filtering theo `chapter` khi câu hỏi có điều kiện.
 
-**Khác biệt duy nhất giữa B và C là việc áp dụng metadata filter ở bước truy xuất.** Điều này cho phép đánh giá ảnh hưởng của filtering mà không thay đổi dữ liệu chunk hoặc embedding model.
+**Khác biệt duy nhất giữa B và C là việc sử dụng metadata filter ở bước truy xuất.**
+
+Nhờ đó, phép so sánh B–C có thể tập trung vào ảnh hưởng của metadata filtering mà không thay đổi các tham số chunking.
 
 ### 2.2. Bộ câu hỏi benchmark
 
-Benchmark được lưu tại `benchmark/questions.json`, gồm **20 câu hỏi**:
+Tôi xây dựng bộ benchmark gồm **20 câu hỏi**, lưu tại `benchmark/questions.json`.
 
-- Q01–Q15: 15 câu thuộc tập dev.
-- Q16–Q20: 5 câu thuộc tập test.
+Bộ câu hỏi được chia thành:
 
-Bộ câu hỏi bao gồm dạng trực tiếp, diễn đạt lại và câu hỏi sử dụng metadata filter.
+- **Dev:** Q01–Q15, gồm 15 câu.
+- **Test:** Q16–Q20, gồm 5 câu.
 
-Có 4 câu hỏi có filter:
+Các câu hỏi bao gồm dạng hỏi trực tiếp, diễn đạt lại và câu hỏi có điều kiện metadata.
+
+Có bốn câu sử dụng filter:
 
 | Question ID | Split | Filter |
 |---|---|---|
-| Q06 | Dev | chapter = 1 |
-| Q14 | Dev | chapter = 2 |
-| Q17 | Test | chapter = 2 |
-| Q20 | Test | chapter = 2 |
+| Q06 | Dev | `chapter = "1"` |
+| Q14 | Dev | `chapter = "2"` |
+| Q17 | Test | `chapter = "2"` |
+| Q20 | Test | `chapter = "2"` |
 
-Mỗi câu hỏi có `gold_answer` và `gold_evidence`, bao gồm mã nguồn, trang PDF, đoạn bằng chứng và evidence anchor.
+Mỗi câu lưu các thông tin:
 
-Trước khi truy xuất, chương trình kiểm tra evidence anchor có tồn tại trong văn bản đã chuẩn hóa của trang PDF tham chiếu hay không.
+- Mã câu hỏi và split.
+- Nội dung câu hỏi.
+- Đáp án kỳ vọng (`gold_answer`).
+- Nguồn và trang chứa evidence.
+- Đoạn evidence tham chiếu.
+- Evidence anchor.
+- Metadata filter nếu có.
 
-Việc kiểm tra tự động này giúp phát hiện gold không tồn tại trong nguồn, nhưng chưa thay thế được bước xác minh thủ công về mức độ đầy đủ của bằng chứng.
+Trong quá trình chạy, chương trình kiểm tra sự tồn tại của evidence anchor trong văn bản trang PDF đã chuẩn hóa.
 
-Một hạn chế của bộ câu hỏi là filter Chương 1 ở Q06 chưa được thể hiện trực tiếp trong câu hỏi. Trong thí nghiệm, giá trị filter được khai báo trong benchmark; nếu sử dụng trong môi trường thực tế, cần bảo đảm giá trị này đến từ người dùng hoặc ngữ cảnh trước truy xuất.
+Tuy nhiên, việc xác minh tự động chỉ chứng minh anchor có trong nguồn, chưa bảo đảm đoạn bằng chứng chứa đầy đủ mọi điều kiện của đáp án. Vì vậy cần kết hợp đánh giá thủ công.
 
-### 2.3. Tiêu chí lựa chọn chiến lược
+Một điểm hạn chế là câu Q06 có filter theo chương 1 nhưng nội dung câu hỏi chưa chỉ rõ chương. Trong ứng dụng thực tế, filter cần được cung cấp từ câu hỏi hoặc ngữ cảnh trước khi truy xuất.
 
-Các tiêu chí được sử dụng để phân tích gồm:
+### 2.3. Tiêu chí chọn chiến lược
+
+Năm tiêu chí được sử dụng trong benchmark gồm:
 
 1. **Retrieval Accuracy:** Hit@1 và Evidence Hit@3.
-2. **Chunk Coherence:** Mức độ trọn ý và dễ hiểu của chunk.
-3. **Metadata Usefulness:** Tính chính xác và khả năng lọc.
+2. **Chunk Coherence:** Mức độ trọn ý của chunk.
+3. **Metadata Usefulness:** Tính đầy đủ, chính xác và khả năng lọc.
 4. **Grounding Quality:** Mức độ đầy đủ của bằng chứng truy xuất.
-5. **Data Strategy Impact:** Ảnh hưởng đến số chunk, thời gian và chi phí.
+5. **Data Strategy Impact:** Ảnh hưởng đến chất lượng, số chunk, thời gian và chi phí.
 
-Ưu tiên phân tích là khả năng truy xuất evidence chính xác, tiếp theo là chất lượng chunk và metadata.
+Các tiêu chí giúp so sánh chiến lược trên cả chất lượng truy xuất và tài nguyên sử dụng.
 
-Tuy nhiên, chưa có bản ghi độc lập xác nhận tiêu chí lựa chọn cuối cùng đã được chốt trước khi xem tập test. Đây là hạn chế về quy trình thí nghiệm, cần được lưu ý khi diễn giải kết quả.
+Bộ câu hỏi ghi rõ quy tắc chia dev/test. Tuy nhiên, chưa có minh chứng độc lập về thời điểm chốt tiêu chí lựa chọn trước khi xem kết quả test. Vì vậy, kết luận được xem là đánh giá trên bộ benchmark hiện có, không phải bằng chứng tối ưu hóa trên một tập test hoàn toàn chưa từng được xem.
 
 ---
 
 ## 3. Kết quả
 
 ### 3.1. Retrieval Accuracy
+
+Kết quả chạy ba chiến lược:
 
 | Strategy | Split | Hit@1 (n/N) | Evidence Hit@3 (n/N) | Chunk count | Thời gian ingest | Chi phí |
 |---|---|---|---|---|---|---|
@@ -188,62 +220,75 @@ Tuy nhiên, chưa có bản ghi độc lập xác nhận tiêu chí lựa chọn
 
 **Nhận xét:**
 
-- A có Evidence Hit@3 trên dev cao nhất, đạt 86,67%.
-- B và C có Hit@1 dev cao hơn A một chút.
-- Trên tập test, cả ba cấu hình có Evidence Hit@3 bằng 80%.
-- B và C có kết quả retrieval tổng hợp giống nhau.
-- Chưa có bằng chứng cho thấy metadata filter cải thiện Hit@3 trong thí nghiệm này.
+- Strategy A có Evidence Hit@3 cao nhất trên dev, đạt 86,67%.
+- Strategy B và C có Hit@1 dev cao hơn A một chút.
+- Trên test, cả ba đạt Evidence Hit@3 là 80%.
+- Kết quả retrieval tổng hợp của B và C giống nhau.
 
-Thời gian trong bảng là thời gian ingest được ghi nhận, không phải thời gian trả lời từng truy vấn.
+Số liệu trên được tính bằng cách kiểm tra nguồn, trang và evidence anchor của các chunk truy xuất. Đây chưa phải kết quả chấm thủ công về độ đủ của bằng chứng.
 
-### 3.2. Chunk count và tài nguyên
+Thời gian trong bảng là thời gian ingest của từng cấu hình, được lặp lại trên dev và test; không phải hai lần ingest riêng biệt.
 
-| Strategy | Số chunk | Tổng ký tự trong chunk | Ingest |
+### 3.2. Chunk count và thời gian
+
+| Strategy | Chunk count | Tổng ký tự chunk | Ingest time |
 |---|---:|---:|---:|
 | A | 224 | 98.531 | 2,04s |
 | B | 161 | 90.229 | 1,74s |
 | C | 161 | 90.229 | 2,15s |
 
-So với A, B và C giảm 63 chunk, tương đương khoảng 28,1%.
+So với A, Strategy B và C giảm 63 chunk, tương đương khoảng 28,1%.
 
-Sự khác biệt về tổng ký tự một phần đến từ việc A sử dụng overlap, khiến văn bản giữa các chunk có thể bị lặp lại.
+A có tổng số ký tự trong các chunk lớn hơn do sử dụng overlap.
+
+B và C có cùng số chunk và tổng ký tự, phù hợp với thiết kế chỉ thay đổi metadata filtering giữa hai cấu hình.
+
+Thời gian ingest đo được khá gần nhau, nên chưa đủ cơ sở để khẳng định cấu hình nào luôn nhanh nhất trong các lần chạy khác nhau.
 
 ### 3.3. Manual Audit
 
-Phần đánh giá thủ công được tổ chức trong `results/manual_audit.csv`.
+Manual audit được tổ chức trong một file duy nhất:
 
-| Strategy | Coherence trung bình /2 (n) | Metadata đủ và đúng (n/N) | Filter tuân thủ | Grounding 0/1/2 và trung bình /2 |
+`results/manual_audit.csv`
+
+File gồm ba nhóm đánh giá:
+
+- **Coherence:** 30 dòng, tương ứng 10 vị trí nguồn × 3 chiến lược.
+- **Metadata:** 45 dòng, tương ứng top-3 của 5 câu test × 3 chiến lược.
+- **Grounding:** 15 dòng, tương ứng 5 câu test × 3 chiến lược.
+
+Bảng tổng hợp:
+
+| Strategy | Coherence trung bình /2 (n) | Metadata đủ và đúng (n/N) | Filter tuân thủ (n/N) | Grounding 0/1/2 và trung bình /2 |
 |---|---|---|---|---|
 | A | Chưa chốt (10 mẫu) | Chưa xác minh (15 bản ghi) | 3/4 phù hợp tự nhiên | Chưa chốt (5 câu) |
 | B | Chưa chốt (10 mẫu) | Chưa xác minh (15 bản ghi) | 2/4 phù hợp tự nhiên | Chưa chốt (5 câu) |
-| C | Chưa chốt (10 mẫu) | Chưa xác minh (15 bản ghi) | 4/4 | Chưa chốt (5 câu) |
+| C | Chưa chốt (10 mẫu) | Chưa xác minh (15 bản ghi) | 4/4 tuân thủ | Chưa chốt (5 câu) |
 
-Các kết quả filter trên được đối chiếu từ trace.
+**Chunk Coherence:** Được đánh giá trên cùng 10 vị trí nội dung nguồn. Mỗi chunk được chấm từ 0 đến 2 dựa trên mức độ giữ trọn ý và ngữ cảnh.
 
-A và B không áp dụng metadata filter, nên tỷ lệ tương ứng chỉ phản ánh việc kết quả tự nhiên nằm đúng chương được yêu cầu. C thực sự thực thi điều kiện lọc.
+**Metadata Correctness:** Đối chiếu metadata của top-3 kết quả test với nguồn PDF và manifest.
 
-**Quy trình audit thủ công:**
+**Grounding Quality:** Đọc các chunk top-3 và chấm 0–2 theo mức độ đủ bằng chứng để trả lời câu hỏi, không đánh giá độ chính xác của câu trả lời do LLM sinh ra.
 
-- **Chunk Coherence:** Chọn 10 vị trí nội dung nguồn cố định và so sánh trên A/B/C, chấm 0–2 kèm lý do.
-- **Metadata Correctness:** Kiểm tra top-3 của 5 câu test trên mỗi chiến lược, đối chiếu `source`, `page` và `chapter` với nguồn.
-- **Grounding Quality:** Đọc top-3 cho 5 câu test ở từng chiến lược và chấm 0–2 theo độ đủ của bằng chứng.
+Cấu hình C tuân thủ điều kiện chapter ở cả 4 câu hỏi có filter. Với A và B, các tỷ lệ tương ứng chỉ thể hiện việc kết quả tình cờ nằm đúng chương vì hai cấu hình này không thực thi filter.
 
-Các điểm chưa được xác minh không được sử dụng để tính giá trị trung bình.
+Các trường điểm và xác minh thủ công chưa được hoàn thiện không được tính thành kết quả audit chính thức.
 
-### 3.4. Đường dẫn trace, nhãn và cách chọn mẫu
+### 3.4. Đường dẫn minh chứng
 
-| Minh chứng | Đường dẫn |
+| Nội dung | Đường dẫn trong repository |
 |---|---|
-| Benchmark | `benchmark/questions.json` |
-| Experiment log | `artifacts/experiment_log.csv` |
-| Metrics | `results/metrics.json` |
-| Top-3 traces | `results/traces.json` |
-| Ingestion statistics | `results/ingestion_stats.json` |
-| Manual audit | `results/manual_audit.csv` |
+| Corpus manifest | [data/manifest.json](../../data/manifest.json) |
+| Benchmark questions | [benchmark/questions.json](../../benchmark/questions.json) |
+| Experiment log | [artifacts/experiment_log.csv](../../artifacts/experiment_log.csv) |
+| Retrieval metrics | [results/metrics.json](../../results/metrics.json) |
+| Top-3 traces | [results/traces.json](../../results/traces.json) |
+| Ingestion statistics | [results/ingestion_stats.json](../../results/ingestion_stats.json) |
+| Manual audit | [results/manual_audit.csv](../../results/manual_audit.csv) |
+| Pipeline code | [starter/src/](../../starter/src/) |
 
-Đối với coherence, cùng 10 vị trí nguồn được lựa chọn để so sánh ba chiến lược. Đối với metadata và grounding, sử dụng toàn bộ 5 câu thuộc tập test.
-
-Việc chọn mẫu theo cùng vị trí nguồn giúp giảm sai lệch khi so sánh các cấu hình chunking khác nhau.
+Đối với coherence, mẫu được tổ chức theo 10 vị trí nguồn cố định để so sánh A/B/C. Đối với metadata và grounding, sử dụng cả 5 câu test.
 
 ---
 
@@ -251,98 +296,103 @@ Việc chọn mẫu theo cùng vị trí nguồn giúp giảm sai lệch khi so 
 
 ### 4.1. So sánh A–B
 
-A sử dụng fixed-size chunking với overlap 50 ký tự, trong khi B chia theo đoạn văn với giới hạn 700 ký tự.
+A sử dụng fixed-size chunking với overlap, còn B chia theo đoạn văn.
 
-Kết quả cho thấy A tạo nhiều chunk hơn, nhưng có Evidence Hit@3 trên tập dev cao hơn B: **86,67% so với 66,67%**.
+A tạo nhiều chunk hơn nhưng có Evidence Hit@3 trên dev đạt **86,67%**, cao hơn mức **66,67%** của B.
 
-Điều này cho thấy fixed-size chunking đang hoạt động tốt hơn theo chỉ số retrieval top-3 trên tập dev hiện tại.
+Điều này cho thấy trong thí nghiệm hiện tại, fixed-size chunking với overlap có lợi thế về khả năng đưa gold evidence vào top-3.
 
-Tuy nhiên, A có nhược điểm là số chunk nhiều hơn và có nội dung lặp do overlap. Điều này có thể làm tăng khối lượng embedding và lưu trữ.
+Tuy nhiên, A làm tăng số chunk và lượng văn bản phải embedding, từ đó có thể tăng tài nguyên lưu trữ và chi phí.
 
-B giảm số chunk và thời gian ingest ghi nhận, nhưng chưa chứng minh được chất lượng retrieval tốt hơn A.
+B giúp giảm số chunk và tổng ký tự, nhưng trên bộ benchmark hiện tại chưa cải thiện Evidence Hit@3 so với A.
 
 ### 4.2. So sánh B–C
 
-B và C sử dụng cùng phương pháp chia đoạn và số chunk.
+B và C giữ nguyên phương pháp chunking và sử dụng cùng embedding model.
 
-Khác biệt duy nhất là C áp dụng metadata filtering khi truy vấn có điều kiện về chương.
+C bổ sung metadata filtering ở bước truy xuất.
 
-Trong bốn câu có filter, C trả về các kết quả tuân thủ điều kiện chương ở toàn bộ top-3.
+Kết quả cho thấy C bảo đảm top-3 nằm trong chương được yêu cầu ở các câu có filter.
 
-Tuy nhiên, các chỉ số Hit@1 và Evidence Hit@3 tổng hợp của B và C không thay đổi.
+Tuy nhiên, Hit@1 và Evidence Hit@3 tổng hợp không tăng so với B.
 
-Như vậy, metadata filtering có tác dụng bảo đảm phạm vi tìm kiếm, nhưng trên bộ benchmark này chưa chứng minh được cải thiện độ chính xác retrieval.
+Do đó, metadata filtering có ích trong việc giới hạn phạm vi truy xuất, nhưng chưa chứng minh được cải thiện retrieval accuracy trên bộ dữ liệu này.
 
 ### 4.3. Hai ví dụ truy xuất thất bại
 
-**Ví dụ 1 — Q03: Tham số `end` của `print()`**
+**Ví dụ 1: Q03 — Tham số `end` trong hàm `print()`**
 
+- **Question ID:** Q03.
 - **Câu hỏi:** How do you prevent print() from automatically starting a new line?
-- **Nguồn tham chiếu:** OpenStax, trang vật lý PDF 21, Chương 1.
-- **Đáp án kỳ vọng:** Sử dụng tham số `end`.
-- **Kết quả:** A/B/C đều không tìm được gold evidence trong top-3 theo phép kiểm tra tự động.
+- **Gold source:** OpenStax, trang vật lý PDF 21, Chương 1.
+- **Đáp án kỳ vọng:** Sử dụng tham số `end` để tiếp tục in trên cùng một dòng.
 
-Các kết quả truy xuất có nội dung liên quan đến hàm `print()`, nhưng không tìm được đoạn evidence tham chiếu đủ để hệ thống đánh dấu đúng.
+Cả ba chiến lược đều không đạt Evidence Hit@3 theo cách kiểm tra gold anchor hiện tại.
 
-Điều này thể hiện hạn chế khi các chunk cùng chủ đề được xếp hạng cao hơn đoạn chứa bằng chứng cần tìm.
+Một số chunk tìm được liên quan đến `print()`, nhưng không chứa đúng đoạn evidence tham chiếu.
 
-**Ví dụ 2 — Q08: Định nghĩa Python string**
+Trường hợp này cho thấy hệ thống có thể tìm các đoạn cùng chủ đề nhưng không tìm được bằng chứng cần thiết trong top-3.
 
+**Ví dụ 2: Q08 — Định nghĩa Python string**
+
+- **Question ID:** Q08.
 - **Câu hỏi:** How does the book define a Python string?
-- **Nguồn tham chiếu:** OpenStax, trang vật lý PDF 26, Chương 1.
-- **Đáp án kỳ vọng:** Chuỗi là dãy ký tự được bao bởi dấu nháy đơn hoặc nháy kép phù hợp.
-- **Kết quả:** A/B/C đều không đạt Evidence Hit@3 theo kiểm tra tự động.
+- **Gold source:** OpenStax, trang vật lý PDF 26, Chương 1.
+- **Đáp án kỳ vọng:** Một chuỗi ký tự nằm giữa cặp dấu nháy đơn hoặc nháy kép phù hợp.
 
-Một số đoạn truy xuất thuộc chủ đề Python string hoặc cú pháp, nhưng không chứa đoạn định nghĩa tham chiếu.
+Cả A, B và C đều không đạt Evidence Hit@3 theo kiểm tra tự động.
 
-Trường hợp này cho thấy semantic similarity không phải lúc nào cũng xếp đoạn định nghĩa chính xác lên top-3.
+Các chunk được truy xuất có liên quan đến chủ đề Python nhưng không chứa đoạn định nghĩa gold.
+
+Điều này cho thấy độ tương đồng vector không phải lúc nào cũng ưu tiên đúng đoạn định nghĩa mà câu hỏi yêu cầu.
 
 ### 4.4. Chiến lược lựa chọn, đánh đổi và điều kiện áp dụng
 
-Từ các kết quả hiện có:
+Dựa trên các chỉ số đã đo:
 
-- **A** phù hợp hơn khi ưu tiên Evidence Hit@3 trên tập dev và chấp nhận số chunk lớn hơn.
-- **B** có ưu điểm giảm số chunk, phù hợp khi ưu tiên dữ liệu gọn hơn và cần tiếp tục kiểm tra coherence.
-- **C** phù hợp khi câu hỏi yêu cầu giới hạn tìm kiếm theo chương hoặc metadata đáng tin cậy.
+**Strategy A** là ứng viên được ưu tiên khi mục tiêu là nâng cao Evidence Hit@3 trên tập dev.
 
-Nếu cần chọn một cấu hình theo kết quả retrieval dev hiện tại, **A là ứng viên được ưu tiên**.
+**Strategy B** giảm số chunk, có thể phù hợp khi muốn giảm lượng dữ liệu embedding và lưu trữ, nhưng cần bổ sung đánh giá coherence để xác nhận lợi ích chất lượng.
 
-Tuy nhiên, lựa chọn này chỉ mang tính kết luận trong phạm vi benchmark hiện có, chưa phải kết luận về chất lượng toàn diện. Kết quả audit thủ công và phép đo chi phí cần được bổ sung trước khi chốt lựa chọn cuối cùng.
+**Strategy C** phù hợp khi ứng dụng yêu cầu lọc tài liệu theo chương hoặc metadata có nguồn xác định.
+
+Nếu cần lựa chọn theo kết quả retrieval dev hiện tại, tôi nghiêng về **Strategy A**.
+
+Tuy nhiên, đây là kết luận có điều kiện. Điểm coherence, grounding và chi phí thực tế chưa đầy đủ nên chưa thể khẳng định A là chiến lược tốt nhất theo toàn bộ năm tiêu chí.
 
 ### 4.5. Hạn chế
 
-Thí nghiệm còn một số hạn chế:
+Thí nghiệm có những hạn chế chính:
 
-1. Corpus chỉ gồm hai chương của một tài liệu, chưa đại diện cho dữ liệu đa nguồn.
-2. Tập test có 5 câu, nên một câu đúng hoặc sai đã làm thay đổi tỷ lệ 20 điểm phần trăm.
-3. Một số evidence anchor không bao quát toàn bộ thông tin của đáp án kỳ vọng.
-4. PDF parsing có thể làm mất ranh giới đoạn hoặc cắt ngang ngữ cảnh.
-5. Manual audit chưa được hoàn thiện và xác nhận đầy đủ.
-6. Chưa đo chính xác embedding tokens, chi phí API và thời gian retrieval riêng biệt.
-7. Chưa có bằng chứng độc lập về việc khóa tiêu chí chọn chiến lược trước khi xem kết quả test.
-
-Do những hạn chế trên, cần thận trọng khi khái quát kết quả.
+1. Corpus chỉ sử dụng hai chương của một tài liệu, chưa đánh giá trên nhiều nguồn.
+2. Bộ test chỉ gồm 5 câu, nên kết quả dễ thay đổi theo từng câu.
+3. Một số evidence anchor chưa thể hiện đầy đủ tất cả điều kiện trong đáp án kỳ vọng.
+4. PDF parsing có thể tạo ngắt dòng không tự nhiên và ảnh hưởng đến chunking.
+5. Manual audit chưa được xác minh và chấm đầy đủ.
+6. Chưa đo đầy đủ thời gian truy xuất, số token và chi phí API.
+7. Chưa có bằng chứng độc lập chứng minh tiêu chí lựa chọn chiến lược đã được khóa trước khi xem test.
 
 ### 4.6. Hướng cải tiến
 
-Nếu tiếp tục phát triển bài thực hành, các hướng cải tiến gồm:
+Nếu tiếp tục phát triển, tôi sẽ ưu tiên:
 
-1. Làm sạch header, footer và ranh giới đoạn PDF trước khi chunking.
-2. Thử nghiệm sentence-aware hoặc section-aware chunking.
-3. Bổ sung kiểm tra các evidence tương đương thay vì chỉ đối sánh một anchor.
-4. Hoàn thiện audit thủ công và mở rộng bộ test.
-5. Ghi log số token, chi phí API và thời gian retrieval.
-6. Bổ sung kiểm tra tự động tính đúng đắn của metadata và gold evidence.
-7. Phát triển web app Streamlit để hỗ trợ kiểm thử truy xuất và xem nhật ký chạy trực tiếp.
+- Cải thiện trích xuất và làm sạch văn bản PDF.
+- Thử nghiệm sentence-aware hoặc section-aware chunking.
+- Loại bỏ header/footer và những phần nội dung lặp không cần thiết.
+- Bổ sung kiểm tra evidence tương đương thay vì chỉ đối sánh anchor.
+- Mở rộng bộ benchmark với nhiều câu hỏi hơn.
+- Ghi nhận token, chi phí và thời gian truy xuất.
+- Hoàn thiện audit thủ công và tự động tổng hợp bảng đánh giá.
+- Phát triển giao diện Streamlit để hỗ trợ kiểm tra retrieval, metadata và nhật ký chạy trực tiếp.
 
 ### 4.7. Kết luận
 
-Bài thực hành đã xây dựng được một pipeline xử lý dữ liệu PDF và truy xuất vector sử dụng **PyMuPDF, OpenAI Embedding và ChromaDB**.
+Qua bài thực hành Day 6, tôi đã xây dựng và chạy thành công pipeline gồm các bước: trích xuất PDF, chuẩn hóa văn bản, chunking, tạo embedding, lưu ChromaDB và truy xuất top-3.
 
-Ba chiến lược A/B/C đã được chạy trên cùng corpus và bộ benchmark 20 câu hỏi.
+Ba chiến lược A/B/C đã được thử nghiệm trên cùng corpus và bộ benchmark 20 câu hỏi.
 
-Kết quả cho thấy fixed-size chunking của A đạt Evidence Hit@3 trên tập dev cao nhất, trong khi paragraph chunking giảm số lượng chunk. Metadata filtering ở cấu hình C giúp bảo đảm giới hạn phạm vi truy xuất theo chương nhưng chưa cải thiện các chỉ số retrieval tổng hợp.
+Kết quả cho thấy fixed-size chunking của A có Evidence Hit@3 trên dev cao nhất, trong khi paragraph chunking giảm số lượng chunk. Metadata filtering trong C giúp giới hạn phạm vi truy xuất nhưng không làm tăng các chỉ số retrieval tổng hợp trong thí nghiệm hiện tại.
 
-Qua thí nghiệm, bài học chính là chất lượng hệ thống truy xuất không chỉ phụ thuộc vào embedding model, mà còn chịu ảnh hưởng từ phương pháp xử lý tài liệu, cách chia chunk, metadata và chất lượng bộ đánh giá.
+Bài thực hành giúp tôi hiểu rằng chất lượng của hệ thống truy xuất không chỉ phụ thuộc vào embedding model mà còn chịu ảnh hưởng trực tiếp từ chất lượng corpus, cách chia chunk, metadata và phương pháp đánh giá.
 
-Cần tiếp tục hoàn thiện manual audit và đo chi phí để đưa ra kết luận lựa chọn chiến lược có độ tin cậy cao hơn.
+Các bước tiếp theo là hoàn thiện manual audit, ghi nhận chi phí và mở rộng benchmark để có kết luận đáng tin cậy hơn.
